@@ -5,7 +5,7 @@ const path = require('path')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-
+let innerHTML;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -21,6 +21,15 @@ function createWindow () {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+  //LLOOK HERE THIS IS WHERE IM GETTING INNERHTML OF ELEMENT
+  mainWindow.webContents.on('did-finish-load',()=>{
+    let code = `var promise = Promise.resolve(document.getElementById('name').innerHTML);
+                promise.then(data => data)`;
+    mainWindow.webContents.executeJavaScript(code, true)
+      .then((result) => {
+        console.log(result) // Will be the JSON object from the fetch call
+      })
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
